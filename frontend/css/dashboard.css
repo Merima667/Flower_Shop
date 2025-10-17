@@ -1,0 +1,59 @@
+.dashboard-section {
+  position: relative;
+  z-index: 2;
+  color: #333;
+}
+
+.text-pink {
+  color: #e75480;
+}
+
+.dashboard-card {
+  border: none;
+  border-radius: 20px;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(231, 84, 128, 0.2);
+}
+
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.bg-pink { background-color: #e75480; }
+.bg-green { background-color: #76c893; }
+.bg-yellow { background-color: #f7c948; }
+
+.btn-custom {
+  background-color: #e75480;
+  color: white;
+  border-radius: 25px;
+  padding: 10px 20px;
+  border: none;
+  transition: background 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: #d1436f;
+}
+
+/* Map section */
+.map-section {
+  position: relative;
+  z-index: 1;
+}
+
+.map-container iframe {
+  border-radius: 15px;
+}

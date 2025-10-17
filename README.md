@@ -11,3 +11,6 @@ A web application for managing books, users, and borrowing records in a digital 
 -  Project structure created
 -  Static frontend in progress
 -  ERD draft to be added
+
+
+![ER Diagram](Screenshot 2025-10-17 141450.png)

@@ -1,0 +1,57 @@
+.background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../assets/main.jpg') no-repeat center center/cover;
+  z-index: -1;
+  filter: brightness(70%);
+}
+
+
+.register-section {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.register-card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 420px;
+  animation: fadeIn 1s ease;
+}
+
+.btn-custom {
+  background-color: #d63384;
+  color: white;
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-custom:hover {
+  background-color: #b82d6e;
+  transform: scale(1.03);
+}
+
+.link-pink {
+  color: #d63384;
+  text-decoration: none;
+}
+
+.link-pink:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

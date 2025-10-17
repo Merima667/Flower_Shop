@@ -1,0 +1,16 @@
+main#spapp > section { 
+    display: none; 
+} 
+
+@keyframes appear { from { width:0; opacity:0; } to { width:100%; opacity:1; } }
+
+main#spapp > section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+main#spapp > section.active {
+  display: block;
+  opacity: 1;
+}

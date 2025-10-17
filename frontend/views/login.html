@@ -1,0 +1,32 @@
+<div class="background-layer"></div> 
+
+  <!-- Login Form -->
+  <section class="login-section d-flex justify-content-center align-items-center">
+    <div class="card login-card shadow-lg p-4">
+      <h2 class="text-center mb-4">Login</h2>
+
+      <form id="loginForm" novalidate>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+          <div class="invalid-feedback">Please enter a valid email.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" required minlength="6" aria-describedby="togglePassword">
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword" aria-pressed="false">Show</button>
+          </div>
+          <div class="invalid-feedback">Password must be at least 6 characters.</div>
+        </div>
+
+        <button type="submit" class="btn btn-custom w-100">Login</button>
+
+        <p class="text-center mt-3 mb-0">
+          Don't have an account? <a href="#register" class="link-pink">Sign Up</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
