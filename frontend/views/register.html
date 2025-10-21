@@ -1,0 +1,48 @@
+<div class="background-layer"></div> 
+  <!-- Registration Form -->
+  <section class="register-section">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+      <div class="card register-card shadow-lg p-4">
+        <h2 class="text-center mb-4">Sign Up</h2>
+
+        <form id="registerForm" novalidate>
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+            <div class="invalid-feedback">Please enter your full name.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="password" placeholder="Enter password" required minlength="6">
+              <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
+            </div>
+            <div class="invalid-feedback">Password must be at least 6 characters.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="confirmPassword" placeholder="Repeat password" required>
+              <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">Show</button>
+            </div>
+            <div class="invalid-feedback">Passwords do not match.</div>
+          </div>
+
+
+          <button type="submit" class="btn btn-custom w-100">Create Account</button>
+
+          <p class="text-center mt-3 mb-0">
+            Already have an account? <a href="#login" class="link-pink">Login</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>

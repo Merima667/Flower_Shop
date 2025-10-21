@@ -1,0 +1,62 @@
+<div class="background-layer"></div>
+
+<!-- Dashboard Section -->
+<section class="dashboard-section py-5">
+  <div class="container">
+    <!-- Welcome message -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold">Welcome to Your Dashboard 🌸</h1>
+      <p class="text-muted">Manage your account, view orders, and explore new floral collections.</p>
+      <hr class="w-25 mx-auto">
+    </div>
+
+    <!-- Dashboard content -->
+    <div class="row g-4">
+      <!-- Profile Card -->
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 text-center p-4">
+          <div class="card-body">
+            <h4 class="card-title mb-3">👤 Profile</h4>
+            <p class="card-text">View and update your personal information.</p>
+            <a href="#profile" class="btn btn-custom w-100">Edit Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Card -->
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 text-center p-4">
+          <div class="card-body">
+            <h4 class="card-title mb-3">🛍️ My Orders</h4>
+            <p class="card-text">Check your recent purchases and delivery status.</p>
+            <a href="#orders" class="btn btn-custom w-100">View Orders</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shop Card -->
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 text-center p-4">
+          <div class="card-body">
+            <h4 class="card-title mb-3">🌷 Shop</h4>
+            <p class="card-text">Browse our beautiful flower collection and new arrivals.</p>
+            <a href="#shop" class="btn btn-custom w-100">Go to Shop</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <div class="text-center mt-5">
+      <button id="logoutBtn" class="btn btn-outline-danger px-5">Logout</button>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard Script -->
+<script>
+  document.getElementById("logoutBtn").addEventListener("click", function() {
+    alert("You have been logged out.");
+    window.location.hash = "#login";
+  });
+</script>

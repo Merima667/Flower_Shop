@@ -1,0 +1,22 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fffdf9;
+}
+
+.navbar-brand {
+  color: #4c2a00 !important;
+}
+
+h1 {
+  color: #2b3d33;
+  font-weight: 700;
+}
+
+p {
+  color: #4f4f4f;
+}
+
+.map-container {
+  border-radius: 20px;
+  overflow: hidden;
+}
