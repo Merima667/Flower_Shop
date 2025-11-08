@@ -1,19 +1,16 @@
 <?php
-require_once 'BaseDao.php';
+require_once __DIR__ . '/BaseDao.php';
 
 
 class CustomerDao extends BaseDao {
     public function __construct() {
         parent::__construct("customers");
     }
-    public function getByCustomerId($customer_id) {
-        return $this->getById($customer_id);
-    }
-    public function deleteCustomer($customer_id) {
-        return $this->delete($customer_id);
-    }
-    public function insertCustomer($data) {
-        return $this->insert($data);
+    public function getByCustomerEmail($email) {
+      $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE email = :email");
+       $stmt->bindParam(':email', $email);
+       $stmt->execute();
+       return $stmt->fetchAll();
     }
 }
 ?>
