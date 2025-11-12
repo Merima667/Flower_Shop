@@ -2,8 +2,8 @@
 class Database {
     private static $host = 'localhost';
     private static $dbName = 'flower_shop';
-    private static $username = '';
-    private static $password = '';
+    private static $username = 'root';
+    private static $password = 'root';
     private static $connection = null;
 
     public static function connect() {

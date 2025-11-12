@@ -1,21 +1,18 @@
 <?php
-require_once 'BaseDao.php';
+require_once  __DIR__ . '/BaseDao.php';
 
 class AdminDao extends BaseDao {
     public function __construct() {
         parent::__construct("admins");
     }
-    public function getByAdminId($admin_id) {
+    public function getAdminById($admin_id) {
         return $this->getById($admin_id);
     }
-    public function insertAdmin($data) {
-        return $this->insert($data);
-    }
-    public function updateAdmin($admin_id,$data) {
-        return $this->update($admin_id, $data);
-    }
-    public function deleteAdmin($admin_id) {
-        return $this->delete($admin_id);
+    public function getByAdminEmail($email) {
+         $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE email = :email");
+       $stmt->bindParam(':email', $email);
+       $stmt->execute();
+       return $stmt->fetch();
     }
 }
 ?>
