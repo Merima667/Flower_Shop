@@ -11,6 +11,11 @@ class BaseService {
         return $this->dao->getAll();
     }
 
+    public function add($entity)
+    {
+        return $this->dao->add($entity);
+    }
+
     public function getById($id) {
         return $this->dao->getById($id);
     }

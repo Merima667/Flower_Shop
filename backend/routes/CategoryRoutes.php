@@ -11,6 +11,7 @@
  * )
  */
 Flight::route('GET /category', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::categoryService()->getAll());
 });
 
@@ -33,6 +34,7 @@ Flight::route('GET /category', function(){
  * )
  */
 Flight::route('GET /category/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::categoryService()->getById($id));
 });
 
@@ -55,6 +57,7 @@ Flight::route('GET /category/@id', function($id){
  * )
  */
 Flight::route('GET /category/name/@category_name', function($category_name){ 
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::categoryService()->getByCategoryName($category_name));
 });
 
@@ -77,6 +80,7 @@ Flight::route('GET /category/name/@category_name', function($category_name){
  * )
  */
 Flight::route('POST /category', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::categoryService()->insertCategory($data));
 });
@@ -108,6 +112,7 @@ Flight::route('POST /category', function(){
  */
 
 Flight::route('PUT /category/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::categoryService()->update($id, $data));
 });
@@ -131,6 +136,7 @@ Flight::route('PUT /category/@id', function($id){
  * )
  */
 Flight::route('DELETE /category/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::categoryService()->deleteCategory($id));
 });
 ?>

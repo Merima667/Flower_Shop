@@ -2,13 +2,12 @@
 
 require_once __DIR__ . '/BaseService.php';
 require_once __DIR__ . '/../dao/OrderDao.php';
-require_once __DIR__ . '/../dao/CustomerDao.php';
 
 class OrderService extends BaseService {
-    protected $customerDao;
+    protected $userDao;
     public function __construct() {
         $dao = new OrderDao();
-        $this->customerDao = new CustomerDao();
+        $this->userDao = new UserDao();
         parent::__construct($dao);
     }
     
@@ -33,14 +32,14 @@ class OrderService extends BaseService {
         return $this->dao->getByOrderStatus($status);
     }
 
-    public function getByCustomerId($customer_id) {
-        $customer = $this->customerDao->getById($customer_id);
-        if(!$customer) {
-            throw new Exception("Customer doesn't exist!");
+    public function getByUserId($user_id) {
+        $user = $this->userDao->getById($user_id);
+        if(!$user) {
+            throw new Exception("User doesn't exist!");
         }
-        $orders = $this->dao->getByCustomerId($customer_id);
+        $orders = $this->dao->getByUserId($user_id);
         if(empty($orders)) {
-            throw new Exception("Customer has no orders!");
+            throw new Exception("User has no orders!");
         }
         return $orders;
     }

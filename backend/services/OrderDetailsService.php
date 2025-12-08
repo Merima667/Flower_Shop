@@ -3,15 +3,12 @@
 require_once __DIR__ . '/BaseService.php';
 require_once __DIR__ . '/../dao/OrderDetailsDao.php';
 require_once __DIR__ . '/../dao/OrderDao.php';
-require_once __DIR__ . '/../dao/CustomerDao.php';
 require_once __DIR__ . '/../dao/ProductDao.php';
 
 class OrderDetailsService extends BaseService {
-    protected $customerDao;
     protected $productDao;
     public function __construct() {
         $dao = new OrderDetailsDao();
-        $this->customerDao = new CustomerDao();
         $this->productDao = new ProductDao();
         parent::__construct($dao);
     }
@@ -36,12 +33,12 @@ class OrderDetailsService extends BaseService {
         return $order;
     }
 
-    public function getByAdminId($admin_id) {
-        $admin = $this->dao->getByAdminId($admin_id);
-        if(empty($admin)) {
-            throw new Exception("No orders found for this Admin ID!");
+    public function getByUserId($user_id) {
+        $user = $this->dao->getByUserId($user_id);
+        if(empty($user)) {
+            throw new Exception("No orders found for this User ID!");
         }
-        return $admin;
+        return $user;
     }
 
     public function validateQuantity($requested_quantity) {

@@ -11,6 +11,7 @@
  * )
  */
 Flight::route('GET /orderDetail', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     Flight::json(Flight::orderDetailsService()->getAll());
 });
 
@@ -33,6 +34,7 @@ Flight::route('GET /orderDetail', function(){
  * )
  */
 Flight::route('GET /orderDetail/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::orderDetailsService()->getByOrderDetailsId($id));
 });
 
@@ -55,6 +57,7 @@ Flight::route('GET /orderDetail/@id', function($id){
  * )
  */
 Flight::route('GET /orderDetail/product/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderDetailsService()->getByProductId($id));
 });
 
@@ -77,19 +80,20 @@ Flight::route('GET /orderDetail/product/@id', function($id){
  * )
  */
 Flight::route('GET /orderDetail/order/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderDetailsService()->getByOrderId($id));
 });
 
 /**
  * @OA\Get(
- *     path="/orderDetail/admin/{id}",
+ *     path="/orderDetail/user/{id}",
  *     tags={"orderDetails"},
- *     summary="Get order details by admin ID",
+ *     summary="Get order details by User ID",
  *     @OA\Parameter(
  *         name="id",
  *         in="path",
  *         required=true,
- *         description="ID of the admin",
+ *         description="ID of the user",
  *         @OA\Schema(type="integer", example=2)
  *     ),
  *     @OA\Response(
@@ -98,8 +102,9 @@ Flight::route('GET /orderDetail/order/@id', function($id){
  *     )
  * )
  */
-Flight::route('GET /orderDetail/admin/@id', function($id){ 
-    Flight::json(Flight::orderDetailsService()->getByAdminId($id));
+Flight::route('GET /orderDetail/user/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::json(Flight::orderDetailsService()->getByUserId($id));
 });
 
 /**
@@ -114,7 +119,7 @@ Flight::route('GET /orderDetail/admin/@id', function($id){
  *             @OA\Property(property="quantity", type="integer", example=5),
  *             @OA\Property(property="product_id", type="integer", example=2),
  *             @OA\Property(property="order_id", type="integer", example=2),
- *             @OA\Property(property="admin_id", type="integer", example=2)
+ *             @OA\Property(property="user_id", type="integer", example=2)
  *         )
  *     ),
  *     @OA\Response(
@@ -124,6 +129,7 @@ Flight::route('GET /orderDetail/admin/@id', function($id){
  * )
  */
 Flight::route('POST /orderDetail', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::orderDetailsService()->createOrderDetail($data));
 });
@@ -147,7 +153,7 @@ Flight::route('POST /orderDetail', function(){
  *             @OA\Property(property="quantity", type="integer", example=5),
  *             @OA\Property(property="product_id", type="integer", example=2),
  *             @OA\Property(property="order_id", type="integer", example=2),
- *             @OA\Property(property="admin_id", type="integer", example=2)
+ *             @OA\Property(property="user_id", type="integer", example=2)
  *         )
  *     ),
  *     @OA\Response(
@@ -158,6 +164,7 @@ Flight::route('POST /orderDetail', function(){
  */
 
 Flight::route('PUT /orderDetail/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::orderDetailsService()->update($id, $data));
 });
@@ -181,6 +188,7 @@ Flight::route('PUT /orderDetail/@id', function($id){
  * )
  */
 Flight::route('DELETE /orderDetail/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::orderDetailsService()->delete($id));
 });
 ?>

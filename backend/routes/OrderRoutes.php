@@ -11,6 +11,7 @@
  * )
  */
 Flight::route('GET /order', function(){
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderService()->getAll());
 });
 
@@ -33,6 +34,7 @@ Flight::route('GET /order', function(){
  * )
  */
 Flight::route('GET /order/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderService()->getByOrderId($id));
 });
 
@@ -55,6 +57,7 @@ Flight::route('GET /order/@id', function($id){
  * )
  */
 Flight::route('GET /order/date/@order_date', function($order_date){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderService()->getOrdersByOrderDate($order_date));
 });
 
@@ -77,29 +80,31 @@ Flight::route('GET /order/date/@order_date', function($order_date){
  * )
  */
 Flight::route('GET /order/status/@status', function($status){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderService()->getByOrderStatus($status));
 });
 
 /**
  * @OA\Get(
- *     path="/order/customer/{customer_id}",
+ *     path="/order/user/{user_id}",
  *     tags={"orders"},
- *     summary="Get orders by customer id",
+ *     summary="Get orders by user id",
  *     @OA\Parameter(
- *         name="customer_id",
+ *         name="user_id",
  *         in="path",
  *         required=true,
- *         description="ID of the customer",
+ *         description="ID of the user",
  *         @OA\Schema(type="integer", example=2)
  *     ),
  *     @OA\Response(
  *         response=200,
- *         description="Returns the orders for a single customer"
+ *         description="Returns the orders for a single user"
  *     )
  * )
  */
-Flight::route('GET /order/customer/@customer_id', function($customer_id){ 
-    Flight::json(Flight::orderService()->getByCustomerId($customer_id));
+Flight::route('GET /order/user/@user_id', function($user_id){ 
+    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::json(Flight::orderService()->getByUserId($user_id));
 });
 
 /**
@@ -114,7 +119,7 @@ Flight::route('GET /order/customer/@customer_id', function($customer_id){
  *             @OA\Property(property="order_date", type="string",format = "date", example="2025-10-8"),
  *             @OA\Property(property="status", type="string", example="Pending"),
  *             @OA\Property(property="total", type="number",format = "float", example=50.2),
- *             @OA\Property(property="customer_id", type="integer", example=2)
+ *             @OA\Property(property="user_id", type="integer", example=1)
  *         )
  *     ),
  *     @OA\Response(
@@ -124,6 +129,7 @@ Flight::route('GET /order/customer/@customer_id', function($customer_id){
  * )
  */
 Flight::route('POST /order', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::orderService()->create($data));
 });
@@ -143,11 +149,11 @@ Flight::route('POST /order', function(){
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"order_date", "status", "total", "customer_id"},
+ *             required={"order_date", "status", "total", "user_id"},
  *             @OA\Property(property="order_date", type="string",format = "date", example="2025-10-8"),
  *             @OA\Property(property="status", type="string", example="Pending"),
  *             @OA\Property(property="total", type="number",format = "float", example=50.2),
- *             @OA\Property(property="customer_id", type="integer", example=2)
+ *             @OA\Property(property="user_id", type="integer", example=2)
  *         )
  *     ),
  *     @OA\Response(
@@ -158,6 +164,7 @@ Flight::route('POST /order', function(){
  */
 
 Flight::route('PUT /order/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::orderService()->update($id, $data));
 });
@@ -181,6 +188,7 @@ Flight::route('PUT /order/@id', function($id){
  * )
  */
 Flight::route('DELETE /order/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::orderService()->delete($id));
 });
 ?>

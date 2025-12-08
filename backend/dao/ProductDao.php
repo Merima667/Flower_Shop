@@ -15,9 +15,9 @@ class ProductDao extends BaseDao {
       $stmt->execute();
       return $stmt->fetchAll();
     }
-    public function getByAdminId($admin_id) {
-        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE admin_id = :admin_id");
-        $stmt->bindParam(':admin_id', $admin_id);
+    public function getByUserId($admin_id) {
+        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         return $stmt->fetchAll();
     }
