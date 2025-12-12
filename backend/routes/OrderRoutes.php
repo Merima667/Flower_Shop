@@ -3,6 +3,9 @@
  * @OA\Get(
  *      path="/order",
  *      tags={"orders"},
+ *      security={
+ *         {"ApiKey": {}}
+ *      },
  *      summary="Get all orders",
  *      @OA\Response(
  *           response=200,
@@ -19,6 +22,9 @@ Flight::route('GET /order', function(){
  * @OA\Get(
  *     path="/order/{id}",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },  
  *     summary="Get orders by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -42,6 +48,9 @@ Flight::route('GET /order/@id', function($id){
  * @OA\Get(
  *     path="/order/date/{order_date}",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get orders for a specific date by order date",
  *     @OA\Parameter(
  *         name="order_date",
@@ -65,6 +74,9 @@ Flight::route('GET /order/date/@order_date', function($order_date){
  * @OA\Get(
  *     path="/order/status/{status}",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get orders by order status",
  *     @OA\Parameter(
  *         name="status",
@@ -80,7 +92,7 @@ Flight::route('GET /order/date/@order_date', function($order_date){
  * )
  */
 Flight::route('GET /order/status/@status', function($status){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::orderService()->getByOrderStatus($status));
 });
 
@@ -88,6 +100,9 @@ Flight::route('GET /order/status/@status', function($status){
  * @OA\Get(
  *     path="/order/user/{user_id}",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get orders by user id",
  *     @OA\Parameter(
  *         name="user_id",
@@ -103,7 +118,7 @@ Flight::route('GET /order/status/@status', function($status){
  * )
  */
 Flight::route('GET /order/user/@user_id', function($user_id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::orderService()->getByUserId($user_id));
 });
 
@@ -111,6 +126,9 @@ Flight::route('GET /order/user/@user_id', function($user_id){
  * @OA\Post(
  *     path="/order",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Insert a new order",
  *     @OA\RequestBody(
  *         required=true,
@@ -129,7 +147,7 @@ Flight::route('GET /order/user/@user_id', function($user_id){
  * )
  */
 Flight::route('POST /order', function(){
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::orderService()->create($data));
 });
@@ -138,6 +156,9 @@ Flight::route('POST /order', function(){
  * @OA\Put(
  *     path="/order/{id}",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Update an existing order by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -173,6 +194,9 @@ Flight::route('PUT /order/@id', function($id){
  * @OA\Delete(
  *     path="/order/{id}",
  *     tags={"orders"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Delete an order by ID",
  *     @OA\Parameter(
  *         name="id",

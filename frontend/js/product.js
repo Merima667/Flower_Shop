@@ -23,6 +23,6 @@ document.getElementById("reviewForm").addEventListener("submit", function (e) {
   reviewCard.className = "card mb-3 shadow-sm p-3";
   reviewCard.innerHTML = `<h5>You</h5><p class="text-muted">${review}</p>`;
 
-  document.querySelector(".reviews-section").insertBefore(reviewCard, this);
+  document.getElementById("review-container").appendChild(reviewCard);
   this.reset();
 });

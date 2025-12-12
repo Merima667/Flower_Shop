@@ -84,7 +84,11 @@ Flight::group('/auth', function() {
     * )
     */
    Flight::route('POST /login', function() {
-       $data = Flight::request()->data->getData();
+
+        $data = json_decode(Flight::request()->getBody(), true);
+
+        error_log("Raw login data: " . json_encode($data));
+       /*$data = Flight::request()->data->getData();*/
 
 
        $response = Flight::auth_service()->login($data);
@@ -95,7 +99,9 @@ Flight::group('/auth', function() {
                'data' => $response['data']
            ]);
        } else {
-           Flight::halt(500, $response['error']);
+           Flight::json([
+            'message' => $response['error']
+        ], 500);
        }
    });
 });

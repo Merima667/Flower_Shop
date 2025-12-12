@@ -4,6 +4,9 @@
  * @OA\Get(
  *      path="/user",
  *      tags={"users"},
+ *      security={
+ *         {"ApiKey": {}}
+ *      },
  *      summary="Get all users",
  *      @OA\Response(
  *           response=200,
@@ -20,6 +23,9 @@ Flight::route('GET /user', function(){
  * @OA\Get(
  *     path="/user/{id}",
  *     tags={"users"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get user by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -43,6 +49,9 @@ Flight::route('GET /user/@id', function($id){
  * @OA\Get(
  *     path="/user/email/{email}",
  *     tags={"users"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get user by email",
  *     @OA\Parameter(
  *         name="email",
@@ -66,6 +75,9 @@ Flight::route('GET /user/email/@email', function($email){
  * @OA\Get(
  *     path="/user/role/{role}",
  *     tags={"users"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get users by role",
  *     @OA\Parameter(
  *         name="role",
@@ -89,6 +101,9 @@ Flight::route('GET /user/role/@role', function($role){
  * @OA\Post(
  *     path="/user",
  *     tags={"users"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Insert a new user",
  *     @OA\RequestBody(
  *         required=true,
@@ -115,6 +130,9 @@ Flight::route('POST /user', function(){
  * @OA\Put(
  *     path="/user/{id}",
  *     tags={"users"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Update an existing user by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -147,6 +165,9 @@ Flight::route('PUT /user/@id', function($id){
  * @OA\Delete(
  *     path="/user/{id}",
  *     tags={"users"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Delete a user by ID",
  *     @OA\Parameter(
  *         name="id",

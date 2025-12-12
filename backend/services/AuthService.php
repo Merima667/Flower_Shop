@@ -18,45 +18,42 @@ class AuthService extends BaseService {
    }
 
 
-   public function register($entity) {  
-       if (empty($entity['email']) || empty($entity['password'] || empty($entity['first_name'] || empty($entity['last_name'])))) {
-           return ['success' => false, 'error' => 'First name, last name, email and password are required.'];
-       }
+   public function register($entity) { 
+        error_log("Register attempt: " . json_encode($entity));
 
+        if (empty($entity['email']) || empty($entity['password']) || empty($entity['first_name']) || empty($entity['last_name'])) {
+            return ['success' => false, 'error' => 'First name, last name, email and password are required.'];
+        }
 
-       $email_exists = $this->auth_dao->get_user_by_email($entity['email']);
-       if($email_exists){
-           return ['success' => false, 'error' => 'Email already registered.'];
-       }
+        $email_exists = $this->auth_dao->get_user_by_email($entity['email']);
+        if($email_exists){
+            return ['success' => false, 'error' => 'Email already registered.'];
+        }
 
+        $entity['password'] = password_hash($entity['password'], PASSWORD_BCRYPT);
+        $entity = parent::add($entity);
+        unset($entity['password']);
 
-       $entity['password'] = password_hash($entity['password'], PASSWORD_BCRYPT);
-
-
-       $entity = parent::add($entity);
-
-
-       unset($entity['password']);
-
-
-       return ['success' => true, 'data' => $entity];             
+        return ['success' => true, 'data' => $entity];          
    }
 
 
    public function login($entity) {  
-       if (empty($entity['email']) || empty($entity['password'])) {
+
+        error_log("Login attempt: " . json_encode($entity)); 
+
+       if (!isset($entity['email']) || !isset($entity['password']) || empty($entity['email']) || empty($entity['password'])) {
            return ['success' => false, 'error' => 'Email and password are required.'];
        }
 
 
        $user = $this->auth_dao->get_user_by_email($entity['email']);
-       if(!$user){
-           return ['success' => false, 'error' => 'Invalid username or password.'];
+       $hash = $user['password']; 
+
+       if(!$user || !password_verify($entity['password'], $user['password'])) {
+        error_log("Password check failed for user: " . $entity['email']);
+        return ['success' => false, 'error' => 'Invalid username or password.'];
        }
-
-
-       if(!$user || !password_verify($entity['password'], $user['password']))
-           return ['success' => false, 'error' => 'Invalid username or password.'];
 
 
        unset($user['password']);

@@ -3,6 +3,9 @@
  * @OA\Get(
  *      path="/orderDetail",
  *      tags={"orderDetails"},
+ *      security={
+ *         {"ApiKey": {}}
+ *      },
  *      summary="Get all order details",
  *      @OA\Response(
  *           response=200,
@@ -19,6 +22,9 @@ Flight::route('GET /orderDetail', function(){
  * @OA\Get(
  *     path="/orderDetail/{id}",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get order details by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -42,6 +48,9 @@ Flight::route('GET /orderDetail/@id', function($id){
  * @OA\Get(
  *     path="/orderDetail/product/{id}",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get order details  for a single product by product ID",
  *     @OA\Parameter(
  *         name="id",
@@ -65,6 +74,9 @@ Flight::route('GET /orderDetail/product/@id', function($id){
  * @OA\Get(
  *     path="/orderDetail/order/{id}",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get order details  for a single order by order ID",
  *     @OA\Parameter(
  *         name="id",
@@ -88,6 +100,9 @@ Flight::route('GET /orderDetail/order/@id', function($id){
  * @OA\Get(
  *     path="/orderDetail/user/{id}",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get order details by User ID",
  *     @OA\Parameter(
  *         name="id",
@@ -103,7 +118,7 @@ Flight::route('GET /orderDetail/order/@id', function($id){
  * )
  */
 Flight::route('GET /orderDetail/user/@id', function($id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::orderDetailsService()->getByUserId($id));
 });
 
@@ -111,6 +126,9 @@ Flight::route('GET /orderDetail/user/@id', function($id){
  * @OA\Post(
  *     path="/orderDetail",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Insert a new order details",
  *     @OA\RequestBody(
  *         required=true,
@@ -138,6 +156,9 @@ Flight::route('POST /orderDetail', function(){
  * @OA\Put(
  *     path="/orderDetail/{id}",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Update an existing order details by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -173,6 +194,9 @@ Flight::route('PUT /orderDetail/@id', function($id){
  * @OA\Delete(
  *     path="/orderDetail/{id}",
  *     tags={"orderDetails"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Delete an order details by ID",
  *     @OA\Parameter(
  *         name="id",

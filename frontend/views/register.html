@@ -7,10 +7,16 @@
 
         <form id="registerForm" novalidate>
           <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
-            <div class="invalid-feedback">Please enter your full name.</div>
-          </div>
+          <label for="first_name" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="first_name" placeholder="Enter your first name" required>
+          <div class="invalid-feedback">Please enter your first name.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="last_name" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="last_name" placeholder="Enter your last name" required>
+          <div class="invalid-feedback">Please enter your last name.</div>
+        </div>
 
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
@@ -35,6 +41,14 @@
             </div>
             <div class="invalid-feedback">Passwords do not match.</div>
           </div>
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select id="role" name="role" class="form-control" required>
+              <option value="customer">Customer</option>
+              <option value="admin">Admin</option>
+            </select>
+            <div class="invalid-feedback">Please select a role.</div>
+        </div>
 
 
           <button type="submit" class="btn btn-custom w-100">Create Account</button>
@@ -46,3 +60,4 @@
       </div>
     </div>
   </section>
+ 

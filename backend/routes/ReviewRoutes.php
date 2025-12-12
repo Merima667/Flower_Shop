@@ -1,7 +1,7 @@
 <?php
 /**
  * @OA\Get(
- *      path="/review",
+ *      path="/public/review",
  *      tags={"reviews"},
  *      summary="Get all reviews",
  *      @OA\Response(
@@ -14,8 +14,7 @@
  *      )
  * )
  */
-Flight::route('GET /review', function(){
-    Flight::auth_middleware()->authorizeRole(Roles::USER);
+Flight::route('GET /public/review', function(){
     Flight::json(Flight::reviewService()->getAll());
 });
 
@@ -23,6 +22,9 @@ Flight::route('GET /review', function(){
  * @OA\Get(
  *     path="/review/{id}",
  *     tags={"reviews"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get review by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -50,6 +52,9 @@ Flight::route('GET /review/@id', function($id){
  * @OA\Get(
  *     path="/review/user/{user_id}",
  *     tags={"reviews"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get reviews of a specific user",
  *     @OA\Parameter(
  *         name="user_id",
@@ -69,13 +74,13 @@ Flight::route('GET /review/@id', function($id){
  * )
  */
 Flight::route('GET /review/user/@user_id', function($user_id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::reviewService()->getReviewsByUserId($user_id));
 });
 
 /**
  * @OA\Get(
- *     path="/review/product/{product_id}",
+ *     path="/public/review/product/{product_id}",
  *     tags={"reviews"},
  *     summary="Get reviews by product ID",
  *     @OA\Parameter(
@@ -95,8 +100,7 @@ Flight::route('GET /review/user/@user_id', function($user_id){
  *     )
  * )
  */
-Flight::route('GET /review/product/@product_id', function($product_id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+Flight::route('GET /public/review/product/@product_id', function($product_id){ 
     Flight::json(Flight::reviewService()->getByProductId($product_id));
 });
 
@@ -104,6 +108,9 @@ Flight::route('GET /review/product/@product_id', function($product_id){
  * @OA\Post(
  *     path="/review",
  *     tags={"reviews"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Insert a new review",
  *     @OA\RequestBody(
  *         required=true,
@@ -126,7 +133,7 @@ Flight::route('GET /review/product/@product_id', function($product_id){
  * )
  */
 Flight::route('POST /review', function(){
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    Flight::auth_middleware()->authorizeRole(Roles::USER);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::reviewService()->create($data));
 });
@@ -135,6 +142,9 @@ Flight::route('POST /review', function(){
  * @OA\Put(
  *     path="/review/{id}",
  *     tags={"reviews"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Update an existing review by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -174,6 +184,9 @@ Flight::route('PUT /review/@id', function($id){
  * @OA\Delete(
  *     path="/review/{id}",
  *     tags={"reviews"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Delete a review by ID",
  *     @OA\Parameter(
  *         name="id",
