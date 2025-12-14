@@ -19,7 +19,7 @@ var CustomerProducts = {
                                 </div> 
                                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                                     <div class="text-center">
-                                        <a class="btn btn-outline-dark mt-auto" href="#product\?id=${p.id}">View more</a>
+                                        <a href="#product" class="btn btn-outline-dark mt-auto view-product" data-id="${p.id}">View more</a>
                                     </div>
                                 </div>   
                             </div> 

@@ -74,7 +74,8 @@ Flight::route('GET /public/category/name/@category_name', function($category_nam
  *         required=true,
  *         @OA\JsonContent(
  *             required={"category_name"},
- *             @OA\Property(property="category_name", type="string", example="Lilies")
+ *             @OA\Property(property="category_name", type="string", example="Lilies"),
+ *             @OA\Property(property="description", type="string", example="Beautiful spring flower")
  *         )
  *     ),
  *     @OA\Response(
@@ -108,7 +109,8 @@ Flight::route('POST /category', function(){
  *         required=true,
  *         @OA\JsonContent(
  *             required={"category_name"},
- *             @OA\Property(property="category_name", type="string", example="Lilies")
+ *             @OA\Property(property="category_name", type="string", example="Lilies"),
+ *             @OA\Property(property="description", type="string", example="Beautiful spring flower")
  *         )
  *     ),
  *     @OA\Response(

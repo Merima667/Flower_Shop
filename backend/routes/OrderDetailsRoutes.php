@@ -66,7 +66,7 @@ Flight::route('GET /orderDetail/@id', function($id){
  * )
  */
 Flight::route('GET /orderDetail/product/@id', function($id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::orderDetailsService()->getByProductId($id));
 });
 
@@ -92,7 +92,7 @@ Flight::route('GET /orderDetail/product/@id', function($id){
  * )
  */
 Flight::route('GET /orderDetail/order/@id', function($id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::ADMIN, Roles::USER]);
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::orderDetailsService()->getByOrderId($id));
 });
 

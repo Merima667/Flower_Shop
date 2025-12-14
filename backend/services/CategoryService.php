@@ -14,11 +14,27 @@ class CategoryService extends BaseService {
     }
 
     public function insertCategory($data) {
+        if (empty($data['category_name'])) {
+            throw new Exception("Category name is required");
+        }
         $existing = $this->getByCategoryName($data['category_name']);
         if(!empty($existing)) {
             throw new Exception('Category already exists!');
         }
+        $data['description'] = $data['description'] ?? null;
         return $this->create($data);
+    }
+
+    public function update($id, $data) {
+        $existing = $this->getById($id);
+        if (empty($existing)) {
+            throw new Exception("Category doesn't exist");
+        }
+        if (empty($data['category_name'])) {
+            throw new Exception("Category name is required");
+        }
+        $data['description'] = $data['description'] ?? $existing['description'];
+        return parent::update($id, $data);
     }
 
     public function deleteCategory($id) {

@@ -25,12 +25,12 @@ class ReviewService extends BaseService {
     }
 
     public function addReview($data) {
-    if (empty($data['user_id']) || empty($data['product_id']) || empty($data['review_description']) || empty($data['name'])) {
+    if (empty($data['product_id']) || empty($data['review_description']) || empty($data['name'])) {
         throw new Exception("All entries are required!");
     }
-
+    $user_id = $data['user_id'] ?? null; 
     $userDao = new UserDao();
-    $user = $userDao->getById($data['user_id']);
+    $user = $userDao->getById($user_id);
     if (!$user) {
         throw new Exception("User not found!");
     }
@@ -38,8 +38,10 @@ class ReviewService extends BaseService {
     if ($user['role'] !== 'customer') {
         throw new Exception("Only customers can write reviews!");
     }
-
-    return $this->dao->insert($data);
+    $data['user_id'] = $user_id;
+    $insertedId = $this->dao->insert($data);
+    $data['id'] = $insertedId;
+    return $data;
 }
 
     public function getByProductId($product_id) {

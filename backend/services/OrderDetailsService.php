@@ -26,11 +26,17 @@ class OrderDetailsService extends BaseService {
     }
 
     public function getByOrderId($order_id) {
-        $order = $this->dao->getByOrderId($order_id);
-        if(empty($order)) {
-            throw new Exception("Order with this ID does not exist!");
+        $details = $this->dao->getByOrderId($order_id);
+
+        if(empty($details)) {
+            return []; 
         }
-        return $order;
+
+        foreach($details as &$d) {
+            $d['total'] = isset($d['total']) ? floatval($d['total']) : 0;
+        }
+
+        return $details;
     }
 
     public function getByUserId($user_id) {
@@ -54,6 +60,9 @@ class OrderDetailsService extends BaseService {
     public function createOrderDetail($data) {
         $this->validateQuantity($data['quantity']);
         $stock = $this->productDao->getStockByProductId($data['product_id']);
+        error_log("DEBUG STOCK: " . json_encode($stock));
+        error_log("DEBUG PRODUCT ID: " . $data['product_id']);
+        error_log("DEBUG ORDER DETAILS DATA: " . json_encode($data));
         if($data['quantity']>$stock) {
             throw new Exception("Requested quantity exceeds available stock. Available: $stock");
         }

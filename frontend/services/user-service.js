@@ -14,14 +14,28 @@ var UserService = {
     },
     login: function (entity) {
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "auth/login",
+            url: Constants.PROJECT_BASE_URL + "/auth/login",
             type: "POST",
             data: JSON.stringify(entity),
             contentType: "application/json",
             dataType: "json",
             success: function (result) {
-                console.log(result);
+                console.log("Login success:",result);
                 localStorage.setItem("user_token", result.data.token);
+
+                const parsed = Utils.parseJwt(result.data.token);
+                if(parsed && parsed.user) {
+                    localStorage.setItem("currentUser", JSON.stringify({
+                        id: parsed.user.id,
+                        first_name: parsed.user.first_name,
+                        last_name: parsed.user.last_name,
+                        email: parsed.user.email,
+                        role: parsed.user.role
+                    }));
+                } else {
+                    console.warn("JWT parsed, but user object missing");
+                }
+
                 UserService.generateMenuItems();
                 window.location.replace("#home");
             },
@@ -54,7 +68,7 @@ var UserService = {
     
 
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "auth/register",
+            url: Constants.PROJECT_BASE_URL + "/auth/register",
             type: "POST",
             data: JSON.stringify(formData),
             contentType: "application/json",

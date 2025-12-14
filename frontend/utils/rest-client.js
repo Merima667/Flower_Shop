@@ -14,22 +14,33 @@ let RestClient = {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 if(error_callback) error_callback(jqXHR);
-            },
+            }
         });
     },
     request: function (url, method, data, callback, error_callback) {
-        $,ajax({
+        $.ajax({
             url: Constants.PROJECT_BASE_URL + url,
             type: method,
+            contentType: "application/json",
+            data: typeof data === "string" ? data : JSON.stringify(data),
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(
                     "Authentication",
                     localStorage.getItem("user_token")
                 );
             },
-            data: data,
-        })
-        .done(function (response, status, jqXHR) {
+            success: function(response) {
+                if(callback) callback(response);
+            },
+            error: function(jqXHR) {
+                if(error_callback) {
+                    error_callback(jqXHR);
+                } else {
+                    console.error("REST Client error:", jqXHR);
+                }
+            }
+        });
+        /*.done(function (response, status, jqXHR) {
             if(callback) callback(response);
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -38,7 +49,7 @@ let RestClient = {
             } else {
                 TransformStream.error(jqXHR.responseJSON.message);
             }
-        });
+        });*/
     },
 
     post: function (url, data, callback, error_callback) {

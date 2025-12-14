@@ -1,25 +1,31 @@
-<div class="background-layer"></div> 
-
 <section id="cartPage" class="cart-page">
   <div class="container py-5">
 
-    <h1 class="text-pink mb-4">Your Cart</h1>
+    <h1 class="text-pink mb-4">Your Orders</h1>
 
-    <div class="row">
-      <div class="col-lg-8" id="cartItems">
-      </div>
-
-      <div class="col-lg-4">
-        <div class="cart-summary p-4 bg-white rounded shadow-sm">
-          <h4 class="mb-3">Order Summary</h4>
-          <div class="d-flex justify-content-between mb-2">
-            <span>Total:</span>
-            <span id="cartTotal" class="text-pink fw-bold">$0.00</span>
-          </div>
-          <button id="checkoutBtn" class="btn btn-custom w-100 mt-3">Checkout</button>
-        </div>
-      </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Delivery Address</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+        </tbody>
+      </table>
     </div>
 
   </div>
 </section>
+
+<script src="frontend/services/customer-order-service.js"></script>
+
+<script>
+  $(document).ready(function () {
+    CustomerOrderService.getMyOrders();
+  });
+</script>

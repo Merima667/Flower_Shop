@@ -17,7 +17,9 @@ class OrderDetailsDao extends BaseDao {
         $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE order_id = :order_id");
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $result = $stmt->fetchAll();
+        error_log("DEBUG DAO getByOrderId($order_id): " . json_encode($result));
+        return $result;
     }
 
     public function getByUserId($user_id) {

@@ -135,6 +135,7 @@ Flight::route('GET /public/review/product/@product_id', function($product_id){
 Flight::route('POST /review', function(){
     Flight::auth_middleware()->authorizeRole(Roles::USER);
     $data = Flight::request()->data->getData();
+    $data['user_id'] = Flight::get('user')->id;
     Flight::json(Flight::reviewService()->create($data));
 });
 

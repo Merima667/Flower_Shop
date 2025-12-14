@@ -8,43 +8,22 @@ app.route({view: 'home'});
 app.route({
     view: 'product',
     onReady: function() {
-        const params = new URLSearchParams(window.location.hash.split('?')[1]);
-        const productId = params.get('id');
-        if(productId) {
-            ProductService.getById(productId, function(product) {
-                $("#product-image").attr("src", product.image);
-                $("#product-name").text(product.product_name);
-                $("#product-category").text(product.category);
-                $("#product-price").attr(product.price + "KM");
-                $("#product-description").attr(product.description);
-            });
+        const productId = localStorage.getItem("selected_product_id");
+        if(!productId) return;
+
+        ProductService.getById(productId, ProductService.renderProduct);
+        ReviewService.getByProductId(productId, ReviewService.renderReviews);
+
+        if(localStorage.getItem("user_token")) {
+            ReviewService.init(productId);
+            OrderService.init(productId);
         }
-        $("#orderForm").on("submit", function(e) {
-            e.preventDefault();
-
-            const address = $("#address").val();
-            const quantity =$("#quantity").val();
-
-            if (!address.trim()) {
-                alert("Please enter a valid delivery address.");
-                return;
-            }
-
-            alert(`Order placed successfully!\n\nAddress: ${address}\nQuantity: ${quantity}`);
-            this.reset();
-        });
-        $("#reviewForm").on("submit", function(e) {
-            e.preventDefault();
-            const review = $("#review").val().trim();
-            if (!review) return;
-
-            const reviewCard = `<div class="card mb-3 shadow-sm p-3">
-                                    <h5>You</h5>
-                                    <p class="text-muted">${review}</p>
-                                </div>`;
-            $("#reviews-container").append(reviewCard);
-            this.reset();
-        });
+        else {
+            $("#reviewForm").hide();
+            $("#orderForm").hide();
+            $("#reviews-container").before('<p class="text-muted">Only logged in users can add reviews and place orders.</p>');
+        }
+        
     }
 });
 
@@ -168,8 +147,15 @@ app.route({
 
 app.run();
 
+
+function getCurrentView() {
+    let hash = window.location.hash || "#home";
+    return hash.split("?")[0]; 
+}
+
 $(window).on("hashchange", function () {
-    var current = window.location.hash || "#home";
+    const current = getCurrentView();
+    console.log("Hash changed, showing:", current);
 
     $("#spapp section.active").fadeOut(300, function () {
         $("#spapp section").removeClass("active");
@@ -178,7 +164,16 @@ $(window).on("hashchange", function () {
 });
 
 $(document).ready(function () {
-    var current = window.location.hash || "#home";
+    const current = getCurrentView();
+    console.log("Initial view:", current);
+
     $("#spapp section").hide();
-    $(current).show().addClass("active");    
+    $(current).show().addClass("active");
+});
+
+$(document).on("click", ".view-product", function(e) {
+    e.preventDefault();
+    const productId = $(this).data("id");
+    localStorage.setItem("selected_product_id", productId);
+    window.location.hash = "#product"; 
 });

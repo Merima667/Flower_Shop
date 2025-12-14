@@ -96,7 +96,7 @@ Flight::route('GET /public/product/name/@name', function($name){
  * )
  */
 Flight::route('GET /public/product/category/@category_id', function($category_id){ 
-    Flight::auth_middleware()->authorizeRole([Roles::USER, Roles::ADMIN]);
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::productService()->getByCategoryId($category_id));
 });
 
@@ -126,7 +126,7 @@ Flight::route('GET /public/product/category/@category_id', function($category_id
  * )
  */
 Flight::route('GET /product/stock/@product_id', function($product_id){ 
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::productService()->checkStock($product_id));
 });
 
