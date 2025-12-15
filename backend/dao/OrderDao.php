@@ -23,9 +23,9 @@ class OrderDao extends BaseDao {
         return $stmt->fetchAll();
     }
 
-    public function getByCustomerId($customer_id) {
-        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE customer_id = :customer_id");
-        $stmt->bindParam(':customer_id', $customer_id);
+    public function getByUserId($user_id) {
+        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         return $stmt->fetchAll();
     }

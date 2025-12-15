@@ -12,5 +12,6 @@ class CategoryDao extends BaseDao {
        $stmt->execute();
        return $stmt->fetchAll();
    }
+   
 }
 ?>

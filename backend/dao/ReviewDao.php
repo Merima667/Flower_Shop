@@ -9,9 +9,9 @@ class ReviewDao extends BaseDao {
    public function getByReviewId($review_id) {
       return $this->getById($review_id);
    }
-   public function getReviewByCustomerId($customer_id) {
-      $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE customer_id = :customer_id");
-      $stmt->bindParam(':customer_id', $customer_id);
+   public function getReviewByUserId($user_id) {
+      $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE user_id = :user_id");
+      $stmt->bindParam(':user_id', $user_id);
       $stmt->execute();
       return $stmt->fetchAll();
    }

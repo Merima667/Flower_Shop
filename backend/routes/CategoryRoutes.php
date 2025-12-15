@@ -1,7 +1,7 @@
 <?php
 /**
  * @OA\Get(
- *      path="/category",
+ *      path="/public/category",
  *      tags={"categories"},
  *      summary="Get all categories",
  *      @OA\Response(
@@ -10,7 +10,7 @@
  *      )
  * )
  */
-Flight::route('GET /category', function(){
+Flight::route('GET /public/category', function(){
     Flight::json(Flight::categoryService()->getAll());
 });
 
@@ -18,6 +18,9 @@ Flight::route('GET /category', function(){
  * @OA\Get(
  *     path="/category/{id}",
  *     tags={"categories"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get category by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -33,12 +36,13 @@ Flight::route('GET /category', function(){
  * )
  */
 Flight::route('GET /category/@id', function($id){ 
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::categoryService()->getById($id));
 });
 
 /**
  * @OA\Get(
- *     path="/category/name/{category_name}",
+ *     path="/public/category/name/{category_name}",
  *     tags={"categories"},
  *     summary="Get category by name",
  *     @OA\Parameter(
@@ -54,7 +58,7 @@ Flight::route('GET /category/@id', function($id){
  *     )
  * )
  */
-Flight::route('GET /category/name/@category_name', function($category_name){ 
+Flight::route('GET /public/category/name/@category_name', function($category_name){ 
     Flight::json(Flight::categoryService()->getByCategoryName($category_name));
 });
 
@@ -62,12 +66,16 @@ Flight::route('GET /category/name/@category_name', function($category_name){
  * @OA\Post(
  *     path="/category",
  *     tags={"categories"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Add a new category",
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
  *             required={"category_name"},
- *             @OA\Property(property="category_name", type="string", example="Lilies")
+ *             @OA\Property(property="category_name", type="string", example="Lilies"),
+ *             @OA\Property(property="description", type="string", example="Beautiful spring flower")
  *         )
  *     ),
  *     @OA\Response(
@@ -77,6 +85,7 @@ Flight::route('GET /category/name/@category_name', function($category_name){
  * )
  */
 Flight::route('POST /category', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::categoryService()->insertCategory($data));
 });
@@ -85,6 +94,9 @@ Flight::route('POST /category', function(){
  * @OA\Put(
  *     path="/category/{id}",
  *     tags={"categories"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Update an existing category by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -97,7 +109,8 @@ Flight::route('POST /category', function(){
  *         required=true,
  *         @OA\JsonContent(
  *             required={"category_name"},
- *             @OA\Property(property="category_name", type="string", example="Lilies")
+ *             @OA\Property(property="category_name", type="string", example="Lilies"),
+ *             @OA\Property(property="description", type="string", example="Beautiful spring flower")
  *         )
  *     ),
  *     @OA\Response(
@@ -108,6 +121,7 @@ Flight::route('POST /category', function(){
  */
 
 Flight::route('PUT /category/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::categoryService()->update($id, $data));
 });
@@ -116,6 +130,9 @@ Flight::route('PUT /category/@id', function($id){
  * @OA\Delete(
  *     path="/category/{id}",
  *     tags={"categories"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Delete a category by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -131,6 +148,7 @@ Flight::route('PUT /category/@id', function($id){
  * )
  */
 Flight::route('DELETE /category/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::categoryService()->deleteCategory($id));
 });
 ?>

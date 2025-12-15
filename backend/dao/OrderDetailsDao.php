@@ -17,12 +17,14 @@ class OrderDetailsDao extends BaseDao {
         $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE order_id = :order_id");
         $stmt->bindParam(':order_id', $order_id);
         $stmt->execute();
-        return $stmt->fetchAll();
+        $result = $stmt->fetchAll();
+        error_log("DEBUG DAO getByOrderId($order_id): " . json_encode($result));
+        return $result;
     }
 
-    public function getByAdminId($admin_id) {
-        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE admin_id = :admin_id");
-        $stmt->bindParam(':admin_id', $admin_id);
+    public function getByUserId($user_id) {
+        $stmt = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         return $stmt->fetchAll();
     }

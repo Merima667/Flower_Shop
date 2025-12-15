@@ -1,7 +1,7 @@
 <?php
 /**
  * @OA\Get(
- *      path="/product",
+ *      path="/public/product",
  *      tags={"products"},
  *      summary="Get all products",
  *      @OA\Response(
@@ -14,13 +14,13 @@
  *      )
  * )
  */
-Flight::route('GET /product', function(){
+Flight::route('GET /public/product', function(){
     Flight::json(Flight::productService()->getAll());
 });
 
 /**
  * @OA\Get(
- *     path="/product/{id}",
+ *     path="/public/product/{id}",
  *     tags={"products"},
  *     summary="Get products by ID",
  *     @OA\Parameter(
@@ -40,13 +40,13 @@ Flight::route('GET /product', function(){
  *     )
  * )
  */
-Flight::route('GET /product/@id', function($id){ 
+Flight::route('GET /public/product/@id', function($id){ 
     Flight::json(Flight::productService()->getByProductId($id));
 });
 
 /**
  * @OA\Get(
- *     path="/product/name/{name}",
+ *     path="/public/product/name/{name}",
  *     tags={"products"},
  *     summary="Get products of a specific name",
  *     @OA\Parameter(
@@ -66,14 +66,17 @@ Flight::route('GET /product/@id', function($id){
  *     )
  * )
  */
-Flight::route('GET /product/name/@name', function($name){ 
+Flight::route('GET /public/product/name/@name', function($name){
     Flight::json(Flight::productService()->getByProductName($name));
 });
 
 /**
  * @OA\Get(
- *     path="/product/category/{category_id}",
+ *     path="/public/product/category/{category_id}",
  *     tags={"products"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Get products by category ID",
  *     @OA\Parameter(
  *         name="category_id",
@@ -92,7 +95,8 @@ Flight::route('GET /product/name/@name', function($name){
  *     )
  * )
  */
-Flight::route('GET /product/category/@category_id', function($category_id){ 
+Flight::route('GET /public/product/category/@category_id', function($category_id){ 
+    Flight::auth_middleware()->authorizeRoles([Roles::USER, Roles::ADMIN]);
     Flight::json(Flight::productService()->getByCategoryId($category_id));
 });
 
@@ -100,6 +104,9 @@ Flight::route('GET /product/category/@category_id', function($category_id){
  * @OA\Get(
  *     path="/product/stock/{product_id}",
  *     tags={"products"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Check stock for a specific product",
  *     @OA\Parameter(
  *         name="product_id",
@@ -119,6 +126,7 @@ Flight::route('GET /product/category/@category_id', function($category_id){
  * )
  */
 Flight::route('GET /product/stock/@product_id', function($product_id){ 
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::productService()->checkStock($product_id));
 });
 
@@ -126,16 +134,19 @@ Flight::route('GET /product/stock/@product_id', function($product_id){
  * @OA\Post(
  *     path="/product",
  *     tags={"products"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Insert a new product",
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"product_name", "price", "image_url", "category_id", "admin_id", "stock"},
+ *             required={"product_name", "price", "image_url", "category_id", "user_id", "stock"},
  *             @OA\Property(property="product_name", type="string", example="White lilies"),
  *             @OA\Property(property="price", type="number", format="float", example=45.5),
  *             @OA\Property(property="image_url", type="string", example="/frontend/assets/FB69VCP_LOL_preset_proflowers-mx-tile-wide-sv-new.webp"),
  *             @OA\Property(property="category_id", type="integer", example=2),
- *             @OA\Property(property="admin_id", type="integer", example=3),
+ *             @OA\Property(property="user_id", type="integer", example=3),
  *             @OA\Property(property="stock", type="integer", example=15)
  *         )
  *     ),
@@ -150,6 +161,7 @@ Flight::route('GET /product/stock/@product_id', function($product_id){
  * )
  */
 Flight::route('POST /product', function(){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::productService()->createProduct($data));
 });
@@ -158,6 +170,9 @@ Flight::route('POST /product', function(){
  * @OA\Put(
  *     path="/product/{id}",
  *     tags={"products"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Update an existing product by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -169,12 +184,12 @@ Flight::route('POST /product', function(){
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"product_name", "price", "image_url", "category_id", "admin_id", "stock"},
+ *             required={"product_name", "price", "image_url", "category_id", "user_id", "stock"},
  *             @OA\Property(property="product_name", type="string", example="White lilies"),
  *             @OA\Property(property="price", type="number", format="float", example=45.5),
  *             @OA\Property(property="image_url", type="string", example="/frontend/assets/FB69VCP_LOL_preset_proflowers-mx-tile-wide-sv-new.webp"),
  *             @OA\Property(property="category_id", type="integer", example=2),
- *             @OA\Property(property="admin_id", type="integer", example=3),
+ *             @OA\Property(property="user_id", type="integer", example=3),
  *             @OA\Property(property="stock", type="integer", example=15)
  *         )
  *     ),
@@ -190,6 +205,7 @@ Flight::route('POST /product', function(){
  */
 
 Flight::route('PUT /product/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json(Flight::productService()->update($id, $data));
 });
@@ -198,6 +214,9 @@ Flight::route('PUT /product/@id', function($id){
  * @OA\Delete(
  *     path="/product/{id}",
  *     tags={"products"},
+ *     security={
+ *         {"ApiKey": {}}
+ *      },
  *     summary="Delete a product by ID",
  *     @OA\Parameter(
  *         name="id",
@@ -217,6 +236,7 @@ Flight::route('PUT /product/@id', function($id){
  * )
  */
 Flight::route('DELETE /product/@id', function($id){
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(Flight::productService()->delete($id));
 });
 ?>
