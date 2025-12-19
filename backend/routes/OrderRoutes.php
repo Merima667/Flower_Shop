@@ -196,7 +196,7 @@ Flight::route('POST /order', function(){
 
 /**
  * @OA\Put(
- *     path="/order/{id}",
+ *     path="/order/{id}/status",
  *     tags={"orders"},
  *     security={
  *         {"ApiKey": {}}
@@ -212,11 +212,8 @@ Flight::route('POST /order', function(){
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"order_date", "status", "total", "user_id"},
- *             @OA\Property(property="order_date", type="string",format = "date", example="2025-10-8"),
- *             @OA\Property(property="status", type="string", example="Pending"),
- *             @OA\Property(property="total", type="number",format = "float", example=50.2),
- *             @OA\Property(property="user_id", type="integer", example=2)
+ *             required={"status"},
+ *             @OA\Property(property="status", type="string", example="Pending")
  *         )
  *     ),
  *     @OA\Response(
@@ -226,10 +223,15 @@ Flight::route('POST /order', function(){
  * )
  */
 
-Flight::route('PUT /order/@id', function($id){
+Flight::route('PUT /order/@id/status', function($id){
     Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
-    $data = Flight::request()->data->getData();
-    Flight::json(Flight::orderService()->update($id, $data));
+    $data = json_decode(file_get_contents("php://input"), true);
+    /*$data = Flight::request()->data->getData();*/
+    error_log("PUT DATA: " . json_encode($data));
+    if(!isset($data['status'])) {
+        Flight::halt(400, "Status field is required");
+    }
+    Flight::json(Flight::orderService()->updateStatus($id, $data['status']));
 });
 
 /**

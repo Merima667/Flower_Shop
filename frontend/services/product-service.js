@@ -1,14 +1,17 @@
 var ProductService = {
     getById: function(id, callback) {
         console.log("Fetching product with ID:", id);
+        $.blockUI({ message: '<h3>Loading product...</h3>' });
         $.ajax({
             url: Constants.PROJECT_BASE_URL + "/public/product/" + id,
             type: "GET",
             success: function(product) {
+                $.unblockUI();
                 console.log("Product fetched successfully:", product);
                 if(callback) callback(product);
             },
             error: function(e) {
+                $.unblockUI();
                 console.error("Error loading product", e);
             }
         });

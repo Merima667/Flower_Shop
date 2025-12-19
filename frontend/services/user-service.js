@@ -1,18 +1,80 @@
 var UserService = {
     init: function() {
-        var token = localStorage.getItem("user_token");
-        if(token && token !== undefined) {
+        const token = localStorage.getItem("user_token");
+        let user = null;
+
+        if(token) {
+            try {
+                const parsed = JSON.parse(atob(token.split('.')[1]));
+                user = parsed.user || null;
+            } catch(e) {
+                user = null;
+            }
+        }
+
+        if(user) {
             window.location.replace("#home");
+            return;
         }
         $("#loginForm").validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                }
+            },
+            messages: {
+                email: "Please enter a valid email address",
+                password: "Minimum 6 characters"
+            },
             submitHandler: function(form) {
                 var entity = Object.fromEntries(new FormData(form).entries());
                 console.log("Sending login data:", entity);
                 UserService.login(entity);
             },
         });
+        $("#registerForm").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    minlength: 2
+                }, 
+                last_name: {
+                    required: true,
+                    minlength: 2
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                role: {
+                    required: true
+                }
+            },
+            messages: {
+                first_name: "Please enter your first name(minimum 2 characters)",
+                last_name: "Please enter your last name(minimum 2 characters)",
+                email: "Please enter a valid email address",
+                password: "Please enter a valid password(minimum 6 chracters)",
+                role: "Please select a role"
+            },
+            submitHandler: function(form) {
+                var entity = Object.fromEntries(new FormData(form).entries());
+                console.log("Sending login data:", entity);
+                UserService.register(entity);
+            },
+        });
     },
     login: function (entity) {
+        $.blockUI({ message: '<h3>Logging in...</h3>' });
         $.ajax({
             url: Constants.PROJECT_BASE_URL + "/auth/login",
             type: "POST",
@@ -20,6 +82,7 @@ var UserService = {
             contentType: "application/json",
             dataType: "json",
             success: function (result) {
+                $.unblockUI();
                 console.log("Login success:",result);
                 localStorage.setItem("user_token", result.data.token);
 
@@ -40,6 +103,7 @@ var UserService = {
                 window.location.replace("#home");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.unblockUI();
                 console.log("Server error response:", XMLHttpRequest.responseText);
                 toastr.error(XMLHttpRequest?.responseText ?  XMLHttpRequest.responseText : 'Error');
             },
@@ -47,47 +111,44 @@ var UserService = {
     },
     
     register: function(entity) {
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
-        const password = document.getElementById('password').value;
+        const password = entity.password;
         const confirmPassword = document.getElementById('confirmPassword').value;
 
         if(password !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
-
-        const formData = {
-            first_name: document.getElementById('first_name').value,
-            last_name: document.getElementById('last_name').value,
-            email: document.getElementById('email').value,
-            password: password,
-            role: document.getElementById('role').value
-        };
-
+        delete entity.confirmPassword;
+        console.log("Sending register entity:", entity);
     
-
+        $.blockUI({ message: '<h3>Registering...</h3>' });
         $.ajax({
             url: Constants.PROJECT_BASE_URL + "/auth/register",
             type: "POST",
-            data: JSON.stringify(formData),
+            data: JSON.stringify(entity),
             contentType: "application/json",
             dataType: "json",
             success: function (result) {
+                $.unblockUI();
                 console.log(result);
                 localStorage.setItem("user_token", result.data.token);
                 window.location.replace("#home");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.unblockUI();
                 toastr.error(XMLHttpRequest?.responseText ?  XMLHttpRequest.responseText : 'Error');
             },
-        });
         });
     },
     logout: function () {
         localStorage.clear();
         UserService.generateMenuItems();
-        window.location.replace("#login");
+        window.location.replace("#home");
+        const current = "#home";
+        $("#spapp section.active").fadeOut(0, function () {
+            $("#spapp section").removeClass("active");
+            $(current).fadeIn(0).addClass("active");
+        });
     },
 
     generateMenuItems: function(){

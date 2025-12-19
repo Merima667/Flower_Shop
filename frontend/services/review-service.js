@@ -1,12 +1,15 @@
 var ReviewService = {
     getByProductId: function(id, callback) {
+        $.blockUI({ message: '<h3>Getting all products...</h3>' });
         $.ajax({
             url: Constants.PROJECT_BASE_URL + "/public/review/product/" + id,
             type: "GET", 
             success: function(reviews) {
+                $.unblockUI();
                 if(callback) callback(reviews);
             },
             error: function(e) {
+                $.unblockUI();
                 console.error("Error loading reviews", e);
             }
         });
@@ -26,6 +29,7 @@ var ReviewService = {
         }
         console.log("DEBUG: Sending review payload", payload);
 
+        $.blockUI({ message: '<h3>Placing review...</h3>' });
         $.ajax({
             url: Constants.PROJECT_BASE_URL + "/review",
             type: "POST",
@@ -33,12 +37,14 @@ var ReviewService = {
             data: JSON.stringify(payload),
             headers: {"Authentication": token},
             success: function(response) {
+                $.unblockUI();
                 console.log("DEBUG: Review response", response);
                 if(callback) callback(response);
             },
             error: function(err) {
-                console.error("Error placing order", err);
-                alert("Failed to add review. You have to be logged in as a customer.");
+                $.unblockUI();
+                console.error("Error placing review", err);
+                toastr.error("Failed to add review. You have to be logged in as a customer.");
             }
         });
     },
@@ -55,20 +61,32 @@ var ReviewService = {
     },
 
     init: function(product_id) {
-        $("#reviewForm").off("submit").on("submit", function(e) {
-            e.preventDefault();
-            const reviewText = $("#review").val().trim();
-            if(!reviewText) return;
+        $("#reviewForm").validate({
+            rules: {
+                review: {
+                    required: true,
+                    minlength: 3
+                }
+            },
+            messages: {
+                review: {
+                    required: "Please write your review",
+                    minlength: "Review must be at least 3 characters long"
+                }
+            },
+            submitHandler: function(form) {
+                const reviewText = $("#review").val().trim();
 
-            ReviewService.addReview(product_id, reviewText, function(newReview) {
-                console.log("DEBUG: Review response", newReview);
-                $("#reviews-container").prepend(`
-                    <div class="card mb-3 shadow-sm p-3">
-                        <p class="text-muted">${newReview.review_description}</p>
-                    </div> 
-                `);
-                $("#reviewForm")[0].reset();
-            });
+                ReviewService.addReview(product_id, reviewText, function(newReview) {
+                    console.log("DEBUG: Review response", newReview);
+                    $("#reviews-container").prepend(`
+                        <div class="card mb-3 shadow-sm p-3">
+                            <p class="text-muted">${newReview.review_description}</p>
+                        </div> 
+                    `);
+                    $("#reviewForm")[0].reset();
+                });
+            },
         });
     }
 };
