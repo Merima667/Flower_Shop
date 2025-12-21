@@ -1,6 +1,6 @@
 var app = $.spapp({
     defaultView: "#home",
-    templateDir: "frontend/views/"
+    templateDir: "views/"
 });
 
 app.route({view: 'home'});
