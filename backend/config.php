@@ -7,22 +7,25 @@ error_reporting(E_ALL ^ (E_NOTICE | E_DEPRECATED));
 
 class Config {
     public static function DB_NAME() {
-        return 'flower_shop';
+        return Config::get_env("DB_NAME", "flower_shop");
     }
     public static function DB_PORT() {
-        return 3306;
+        return Config::get_env("DB_PORT", 3306);
     }
     public static function DB_USER() {
-        return 'root';
+        return Config::get_env("DB_USER", 'root');
     }
     public static function DB_PASSWORD() {
-        return 'root';
+        return Config::get_env("DB_PASSWORD", 'root');
     } 
     public static function DB_HOST() {
-        return 'localhost';
+        return Config::get_env("DB_HOST", 'localhost');
     }
     public static function JWT_SECRET() {
-        return 'my_secret_jwt';
+        return Config::get_env("DB_HOST", 'my_secret_jwt');
+    }
+    public static function get_env($name, $default) {
+        return isset($_ENV[$name]) && trim($_ENV[$name]) !== "" ? $_NEV[$name] : $default;
     }
 }
 ?>
