@@ -25,7 +25,7 @@ class Config {
         return Config::get_env("JWT_SECRET", 'my_secret_jwt');
     }
     public static function get_env($name, $default) {
-        return isset($_ENV[$name]) && trim($_ENV[$name]) !== "" ? $_NEV[$name] : $default;
+        return isset($_ENV[$name]) && trim($_ENV[$name]) !== "" ? $_ENV[$name] : $default;
     }
 }
 ?>
