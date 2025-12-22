@@ -143,7 +143,7 @@ var UserService = {
     logout: function () {
         localStorage.clear();
         UserService.generateMenuItems();
-        window.location.replace('home');
+        window.location.replace('#home');
         const current = "#home";
         $("#spapp section.active").fadeOut(0, function () {
             $("#spapp section").removeClass("active");
