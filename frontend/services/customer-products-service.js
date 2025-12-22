@@ -2,7 +2,7 @@ var CustomerProducts = {
     getAllProducts: function() {
         $.blockUI({ message: '<h3>Fetching product...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL() + "/public/product",
+            url: Constants.PROJECT_BASE_URL() + "public/product",
             type: "GET",
             success: function(response) {
                 $.unblockUI();
