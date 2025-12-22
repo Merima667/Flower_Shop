@@ -1,7 +1,7 @@
 var ManageProductService = {
     getAll: function(callback) {
         $.ajax({
-            url: Constants.PROJECT_BASE_URL() + "/public/product",
+            url: Constants.PROJECT_BASE_URL() + "public/product",
             type: "GET",
             success: function(products) {
                 if(callback) callback(products);
