@@ -3,7 +3,7 @@ var ManageCategoryService = {
 
     getAll: function(callback) {
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/category",
+            url: Constants.PROJECT_BASE_URL() + "/public/category",
             type: "GET",
             success: function(categories) {
                 console.log("Fetched categories:", categories);

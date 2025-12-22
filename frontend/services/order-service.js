@@ -33,7 +33,7 @@ let OrderService = {
 
                 $.blockUI({ message: '<h3>Placing order...</h3>' });
                 $.ajax({
-                    url: Constants.PROJECT_BASE_URL + "/product/stock/" + product_id,
+                    url: Constants.PROJECT_BASE_URL() + "/product/stock/" + product_id,
                     type: "GET",
                     headers: {
                         "Authentication": token
@@ -46,7 +46,7 @@ let OrderService = {
                             $("#stockModal").modal("show");
                         } else {
                             $.ajax({
-                                url: Constants.PROJECT_BASE_URL + "/public/product/" + product_id,
+                                url: Constants.PROJECT_BASE_URL() + "/public/product/" + product_id,
                                 type: "GET",
                                 success: function(product) {
                                     const payload = {
@@ -58,7 +58,7 @@ let OrderService = {
                                     };
 
                                     $.ajax({
-                                        url: Constants.PROJECT_BASE_URL + "/order",
+                                        url: Constants.PROJECT_BASE_URL() + "/order",
                                         type: "POST",
                                         contentType: "application/json",
                                         headers: {

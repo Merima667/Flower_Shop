@@ -2,7 +2,7 @@ var ManageOrderService = {
     getAll: function() {
     const token = localStorage.getItem("user_token");
     $.ajax({
-      url: Constants.PROJECT_BASE_URL + "/order",
+      url: Constants.PROJECT_BASE_URL() + "/order",
       type: "GET",
       beforeSend: function(xhr) {
         xhr.setRequestHeader("Authentication", token);
@@ -45,7 +45,7 @@ var ManageOrderService = {
         console.log("Updating order:", orderId, "to status:", newStatus);
         $.blockUI({ message: '<h3>Updating...</h3>' });
         $.ajax({
-        url: Constants.PROJECT_BASE_URL + "/order/" + orderId + "/status",
+        url: Constants.PROJECT_BASE_URL() + "/order/" + orderId + "/status",
         type: "PUT",
         contentType: "application/json",
         headers: {

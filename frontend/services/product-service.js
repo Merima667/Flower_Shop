@@ -3,7 +3,7 @@ var ProductService = {
         console.log("Fetching product with ID:", id);
         $.blockUI({ message: '<h3>Loading product...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/product/" + id,
+            url: Constants.PROJECT_BASE_URL() + "/public/product/" + id,
             type: "GET",
             success: function(product) {
                 $.unblockUI();

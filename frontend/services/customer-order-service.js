@@ -17,7 +17,7 @@ var CustomerOrderService = {
 
         $.blockUI({ message: '<h3>Fetching orders...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/order/user/" + userId,
+            url: Constants.PROJECT_BASE_URL() + "/order/user/" + userId,
             type: "GET",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authentication", token);

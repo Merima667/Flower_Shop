@@ -1,7 +1,7 @@
 var ManageProductService = {
     getAll: function(callback) {
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/product",
+            url: Constants.PROJECT_BASE_URL() + "/public/product",
             type: "GET",
             success: function(products) {
                 if(callback) callback(products);
@@ -83,7 +83,7 @@ var ManageProductService = {
     openEditModal: function(id) {
         $.blockUI({ message: '<h3>Loading...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/product/" + id,
+            url: Constants.PROJECT_BASE_URL() + "/public/product/" + id,
             type: "GET",
             success: function(p) {
                 $.unblockUI();

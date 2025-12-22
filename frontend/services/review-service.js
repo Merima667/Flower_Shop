@@ -2,7 +2,7 @@ var ReviewService = {
     getByProductId: function(id, callback) {
         $.blockUI({ message: '<h3>Getting all products...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/review/product/" + id,
+            url: Constants.PROJECT_BASE_URL() + "/public/review/product/" + id,
             type: "GET", 
             success: function(reviews) {
                 $.unblockUI();
@@ -31,7 +31,7 @@ var ReviewService = {
 
         $.blockUI({ message: '<h3>Placing review...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/review",
+            url: Constants.PROJECT_BASE_URL() + "/review",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(payload),
