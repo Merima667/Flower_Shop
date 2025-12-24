@@ -12,7 +12,7 @@
 */
 /**
 * @OA\Server(
-*     url= "http://localhost/Flower_Shop/backend",
+*     url= BASE_URL,
 *     description="API server"
 * )
 */

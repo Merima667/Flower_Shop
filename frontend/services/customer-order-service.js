@@ -15,17 +15,20 @@ var CustomerOrderService = {
             return;
         }
 
+        $.blockUI({ message: '<h3>Fetching orders...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/order/user/" + userId,
+            url: Constants.PROJECT_BASE_URL() + "/order/user/" + userId,
             type: "GET",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authentication", token);
             },
             success: function (response) {
+                $.unblockUI();
                 console.log(response);
                 CustomerOrderService.renderOrders(response);
             },
             error: function (err) {
+                $.unblockUI();
                 console.error("Error loading orders", err);
             }
         });

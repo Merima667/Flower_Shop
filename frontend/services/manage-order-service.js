@@ -2,7 +2,7 @@ var ManageOrderService = {
     getAll: function() {
     const token = localStorage.getItem("user_token");
     $.ajax({
-      url: Constants.PROJECT_BASE_URL + "/order",
+      url: Constants.PROJECT_BASE_URL() + "/order",
       type: "GET",
       beforeSend: function(xhr) {
         xhr.setRequestHeader("Authentication", token);
@@ -42,8 +42,10 @@ var ManageOrderService = {
     },
     updateStatus: function(orderId, newStatus) {
         const token = localStorage.getItem("user_token");
+        console.log("Updating order:", orderId, "to status:", newStatus);
+        $.blockUI({ message: '<h3>Updating...</h3>' });
         $.ajax({
-        url: Constants.PROJECT_BASE_URL + "/order/" + orderId,
+        url: Constants.PROJECT_BASE_URL() + "/order/" + orderId + "/status",
         type: "PUT",
         contentType: "application/json",
         headers: {
@@ -51,12 +53,18 @@ var ManageOrderService = {
         },
         data: JSON.stringify({ status: newStatus }),
         success: function(res) {
-            alert("Order status updated successfully!");
+          $.unblockUI();
+          toastr.success("Order status updated successfully!");
+          /*ManageOrderService.getAll();*/
         },
         error: function(err) {
-            console.error("Error updating status", err);
-            alert("Failed to update order status.");
+          $.unblockUI();
+          console.error("Error updating status", err);
+          toastr.error("Failed to update order status.");
         }
         });
+    },
+    init: function() {
+      ManageOrderService.getAll();
     }
 }

@@ -3,7 +3,7 @@ var ManageCategoryService = {
 
     getAll: function(callback) {
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/category",
+            url: Constants.PROJECT_BASE_URL() + "/public/category",
             type: "GET",
             success: function(categories) {
                 console.log("Fetched categories:", categories);
@@ -45,13 +45,16 @@ var ManageCategoryService = {
         const description = $("#new-category-description").val().trim()
         if(!name) return alert("Category name is required");
 
+        $.blockUI({ message: '<h3>Saving...</h3>' });
         RestClient.post("/category", {category_name: name, description: description}, function(res) {
-            alert("Category added!");
+            $.unblockUI();
+            toastr.success("Category added!");
             $("#addCategoryModal").modal("hide");
             ManageCategoryService.getAll(ManageCategoryService.renderTable);
         }, function(err) {
+            $.unblockUI();
             console.error("Error adding category", err);
-            alert("Failed to add category.");
+            toastr.error("Failed to add category.");
         });
     },
     openEditModal: function(id) {
@@ -70,26 +73,32 @@ var ManageCategoryService = {
         const description = $("#edit-category-description").val().trim();
         if(!name) return alert("Category name is required");
 
+        $.blockUI({ message: '<h3>Updating...</h3>' });
         RestClient.put("/category/" + id, {category_name: name, description: description}, function(res) {
-            alert("Category updated!");
+            $.unblockUI();
+            toastr.success("Category updated!");
             $("#editCategoryModal").modal("hide");
             ManageCategoryService.getAll(ManageCategoryService.renderTable);
             }, 
             function(err) {
+                $.unblockUI();
                 console.error("Error updating category", err);
-                alert("Update failed.");
+                toastr.error("Update failed.");
         });
     },
     deleteCategory: function(id) {
         if(!confirm("Are you sure you want to delete this category?")) return;
 
+        $.blockUI({ message: '<h3>Deleting...</h3>' });
         RestClient.delete("/category/" + id, {}, function(res) {
-            alert("Category deleted!");
+            $.unblockUI();
+            toastr.success("Category deleted!");
             ManageCategoryService.getAll(ManageCategoryService.renderTable);
         }, 
         function(err) {
+            $.unblockUI();
             console.error("Error deleting category", err);
-            alert("Failed to delete category.");
+            toastr.error("Failed to delete category.");
         });
     },
     updateProductDropDowns: function() {
@@ -103,6 +112,37 @@ var ManageCategoryService = {
             addSelect.append(`<option value="${c.id}">${c.category_name}</option>`);
             editSelect.append(`<option value="${c.id}">${c.category_name}</option>`);
         });
+    },
+    init: function() {
+        $("#addCategoryForm").validate({
+            rules: {
+                new_category_name: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+            messages: {
+                new_category_name: "Please enter a name of the category(minimum 2 characters)"
+            },
+            submitHandler: function(form) {
+                ManageCategoryService.addCategory();
+            },
+        });
+        $("#editCategoryForm").validate({
+            rules: {
+                edit_category_name: {
+                    required: true,
+                    minlength: 2
+                }
+            },
+            messages: {
+                edit_category_name: "Please enter a name of the category(minimum 2 characters)"
+            },
+            submitHandler: function(form) {
+                ManageCategoryService.updateCategory();
+            },
+        });
+        ManageCategoryService.getAll(ManageCategoryService.renderTable);
     }
 
 }

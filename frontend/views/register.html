@@ -8,26 +8,26 @@
         <form id="registerForm" novalidate>
           <div class="mb-3">
           <label for="first_name" class="form-label">First Name</label>
-          <input type="text" class="form-control" id="first_name" placeholder="Enter your first name" required>
+          <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter your first name" required>
           <div class="invalid-feedback">Please enter your first name.</div>
         </div>
 
         <div class="mb-3">
           <label for="last_name" class="form-label">Last Name</label>
-          <input type="text" class="form-control" id="last_name" placeholder="Enter your last name" required>
+          <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter your last name" required>
           <div class="invalid-feedback">Please enter your last name.</div>
         </div>
 
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
             <div class="invalid-feedback">Please enter a valid email.</div>
           </div>
 
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <div class="input-group">
-              <input type="password" class="form-control" id="password" placeholder="Enter password" required minlength="6">
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
               <button class="btn btn-outline-secondary" type="button" id="togglePassword">Show</button>
             </div>
             <div class="invalid-feedback">Password must be at least 6 characters.</div>
@@ -36,7 +36,7 @@
           <div class="mb-3">
             <label for="confirmPassword" class="form-label">Confirm Password</label>
             <div class="input-group">
-              <input type="password" class="form-control" id="confirmPassword" placeholder="Repeat password" required>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Repeat password" required>
               <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">Show</button>
             </div>
             <div class="invalid-feedback">Passwords do not match.</div>

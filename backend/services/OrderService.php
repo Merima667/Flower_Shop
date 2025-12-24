@@ -94,6 +94,20 @@ class OrderService extends BaseService {
 
     return $orderId;
 }
+    public function updateStatus($orderId, $newStatus) {
+        $existingOrder = $this->dao->getByOrderId($orderId);
+        if (!$existingOrder) {
+            throw new Exception("Order not found");
+        }
+
+        $allowedStatuses = ['pending', 'shipped', 'delivered', 'cancelled'];
+        $newStatus = strtolower($newStatus);
+        if (!in_array($newStatus, $allowedStatuses)) {
+            throw new Exception("Invalid status: $newStatus");
+        }
+
+        return $this->dao->update($orderId, ['status' => $newStatus]);
+    }
 }
 
 ?>

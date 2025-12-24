@@ -1,6 +1,6 @@
 var app = $.spapp({
     defaultView: "#home",
-    templateDir: "frontend/views/"
+    templateDir: "views/"
 });
 
 app.route({view: 'home'});
@@ -14,9 +14,24 @@ app.route({
         ProductService.getById(productId, ProductService.renderProduct);
         ReviewService.getByProductId(productId, ReviewService.renderReviews);
 
-        if(localStorage.getItem("user_token")) {
+        const token = localStorage.getItem("user_token");
+        let user = null;
+
+        if(token) {
+            try {
+                const parsed = JSON.parse(atob(token.split('.')[1]));
+                user = parsed.user || null;
+            } catch(e) {
+                user = null;
+            }
+        }
+
+        if(user) {
+            console.log("User exist");
             ReviewService.init(productId);
             OrderService.init(productId);
+            $("#reviewForm").show();
+            $("#orderForm").show();
         }
         else {
             $("#reviewForm").hide();
@@ -30,8 +45,8 @@ app.route({
 app.route({
     view: 'login',
     onReady: function() {
-        const form = document.getElementById("loginForm");
-        if (!form) return;
+        $("#email").focus();
+        UserService.init();
         const pwd = document.getElementById("password");
         const toggle = document.getElementById("togglePassword");
         if (toggle && pwd) {
@@ -42,35 +57,14 @@ app.route({
                 toggle.setAttribute("aria-pressed", isPassword ? "true" : "false");
             });
         }
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const email = document.getElementById("email");
-            const password = document.getElementById("password");
-            let isValid = true;
-            if (!email.value.includes("@") || !email.value.includes(".")) {
-                email.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                email.classList.remove("is-invalid");
-            }
-            if (password.value.length < 6) {
-                password.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                password.classList.remove("is-invalid");
-            }
-            if (isValid) {
-                UserService.login({email: email.value, password: password.value}); 
-            }
-        });
     }
 });
 
 app.route({
     view: 'register',
     onReady: function() {
-        const form = document.getElementById("registerForm");
-        if (!form) return;
+        $("#first-name").focus();
+        UserService.init();
         const pwd = document.getElementById("password");
         const confirmPwd = document.getElementById("confirmPassword");
         const togglePwd = document.getElementById("togglePassword");
@@ -91,53 +85,6 @@ app.route({
                 toggleConfirmPwd.textContent = isPassword ? "Hide" : "Show";
             });
         }
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const first_name = document.getElementById("first_name");
-            const last_name = document.getElementById("last_name");
-            const email = document.getElementById("email");
-            const password = document.getElementById("password");
-            const confirmPassword = document.getElementById("confirmPassword");
-            let isValid = true;
-            if (first_name.value.trim().length < 3) {
-                first_name.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                first_name.classList.remove("is-invalid");
-            }
-            if (last_name.value.trim().length < 3) {
-                last_name.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                last_name.classList.remove("is-invalid");
-            }
-            if (!email.value.includes("@") || !email.value.includes(".")) {
-                email.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                email.classList.remove("is-invalid");
-            }
-            if (password.value.length < 6) {
-                password.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                password.classList.remove("is-invalid");
-            }
-            if (confirmPassword.value !== password.value || confirmPassword.value === "") {
-                confirmPassword.classList.add("is-invalid");
-                isValid = false;
-            } else {
-                confirmPassword.classList.remove("is-invalid");
-            }
-            if (isValid) {
-                UserService.register({
-                first_name: first_name.value,
-                last_name: last_name.value,
-                email: email.value,
-                password: password.value
-            });
-            }
-        });
     }
 });
 
@@ -169,6 +116,7 @@ $(document).ready(function () {
 
     $("#spapp section").hide();
     $(current).show().addClass("active");
+    UserService.generateMenuItems();
 });
 
 $(document).on("click", ".view-product", function(e) {

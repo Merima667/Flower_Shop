@@ -1,9 +1,11 @@
 var CustomerProducts = {
     getAllProducts: function() {
+        $.blockUI({ message: '<h3>Fetching product...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/product",
+            url: Constants.PROJECT_BASE_URL() + "/public/product",
             type: "GET",
             success: function(response) {
+                $.unblockUI();
                 let products = response;
                 $("#shop-products").html("");
                 products.forEach(p => {
@@ -29,6 +31,7 @@ var CustomerProducts = {
                 console.log("Products loaded successfully:", products);
             },
             error: function(e) {
+                $.unblockUI();
                 console.error("Error loading process", e);
             }
         });

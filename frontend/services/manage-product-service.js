@@ -1,7 +1,7 @@
 var ManageProductService = {
     getAll: function(callback) {
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/product",
+            url: Constants.PROJECT_BASE_URL() + "/public/product",
             type: "GET",
             success: function(products) {
                 if(callback) callback(products);
@@ -67,21 +67,26 @@ var ManageProductService = {
         };
         console.log("Payload for add:", payload);
 
+        $.blockUI({ message: '<h3>Saving...</h3>' });
         RestClient.post("/product", payload, function(res) {
-            alert("Product added!");
+            $.unblockUI();
+            toastr.success("Product added!");
             $("#addProductModal").modal("hide");
             ManageProductService.getAll(ManageProductService.renderTable);
         }, function(err) {
+            $.unblockUI();
             console.error("Error adding product", err);
-            alert("Failed to add product. You have to be logged in as an admin.");
+            toastr.error("Failed to add product. You have to be logged in as an admin.");
         });
     },
 
     openEditModal: function(id) {
+        $.blockUI({ message: '<h3>Loading...</h3>' });
         $.ajax({
-            url: Constants.PROJECT_BASE_URL + "/public/product/" + id,
+            url: Constants.PROJECT_BASE_URL() + "/public/product/" + id,
             type: "GET",
             success: function(p) {
+                $.unblockUI();
                 $("#edit-product-id").val(p.id);
                 $("#edit-name").val(p.product_name);
                 $("#category").val(p.category_id);
@@ -93,6 +98,7 @@ var ManageProductService = {
                 editModal.show();
             },
             error: function(e) {
+                $.unblockUI();
                 console.error("Error fetching product",e);
             }
         });
@@ -133,14 +139,17 @@ var ManageProductService = {
 
         console.log("Payload for update:", payload);
 
+        $.blockUI({ message: '<h3>Updating...</h3>' });
         RestClient.put("/product/" + id, payload, function(res) {
-            alert("Product updated!");
+            $.unblockUI();
+            toastr.success("Product updated!");
             $("#editProductModal").modal("hide");
             ManageProductService.getAll(ManageProductService.renderTable);
             }, 
             function(err) {
+                $.unblockUI();
                 console.error("Error updating product", err);
-                alert("Update failed. Check console.");
+                toastr.error("Update failed. Check console.");
             }
         );
     },
@@ -148,12 +157,111 @@ var ManageProductService = {
     deleteProduct: function(id) {
         if(!confirm("Are you sure you want to delete this product?")) return;
 
+        $.blockUI({ message: '<h3>Deleting...</h3>' });
         RestClient.delete("/product/" + id, {}, function(res) {
-            alert("Product deleted!");
+            $.unblockUI();
+            toastr.success("Product deleted!");
             ManageProductService.getAll(ManageProductService.renderTable);
         }, 
         function(err) {
+            $.unblockUI();
             console.error("Error deleting product", err);
         });
+    },
+
+    init: function() {
+        $("#addProductForm").validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 2
+                }, 
+                category: {
+                    required: true
+                },
+                price: {
+                    required: true,
+                    number: true,
+                    min: 0.01
+                },
+                stock: {
+                    required: true,
+                    number: true,
+                    min: 0
+                },
+                description: {
+                    required: true,
+                    min: 5
+                },
+                image: {
+                    url: true
+                }
+            },
+            messages: {
+                name: "Please enter a name of the product(minimum 2 characters)",
+                category: "Please select a category",
+                price: {
+                    required: "Please enter a price",
+                    number: "Price must be a number",
+                    min: "Price must be at least 0.01"
+                },
+                stock: {
+                    required: "Please enter stock quantity",
+                    number: "Stock must be a number",
+                    min: "Stock cannot be negative"
+                },
+                description: "Please enter a valid description(minimum 5 characters)"
+            },
+            submitHandler: function(form) {
+                ManageProductService.addProduct();
+            },
+        });
+        $("#editProductForm").validate({
+            rules: {
+                edit_name: {
+                    required: true,
+                    minlength: 2
+                }, 
+                category: {
+                    required: true
+                },
+                edit_price: {
+                    required: true,
+                    number: true,
+                    min: 0.01
+                },
+                edit_stock: {
+                    required: true,
+                    number: true,
+                    min: 0
+                },
+                edit_description: {
+                    required: true,
+                    min: 5
+                },
+                edit_image: {
+                    url: true
+                }
+            },
+            messages: {
+                name: "Please enter a name of the product(minimum 2 characters)",
+                category: "Please select a category",
+                price: {
+                    required: "Please enter a price",
+                    number: "Price must be a number",
+                    min: "Price must be at least 0.01"
+                },
+                stock: {
+                    required: "Please enter stock quantity",
+                    number: "Stock must be a number",
+                    min: "Stock cannot be negative"
+                },
+                description: "Please enter a valid description(minimum 5 characters)"
+            },
+            submitHandler: function(form) {
+                ManageProductService.updateProduct();
+            },
+        });
+        ManageProductService.getAll(ManageProductService.renderTable);
     }
 }
