@@ -1,16 +1,19 @@
-# Flower_Shop
+🌸 Flower Shop
+A full-stack web application for an online flower shop. Users can browse flowers, place orders and track them, while admins can manage products and orders through a dedicated admin panel.
+🛠️ Tech Stack
 
-##  Description
-A web application for managing books, users, and borrowing records in a digital library.
+Frontend: HTML, CSS, JavaScript
+Backend: Java
+Database: MySQL
 
-##  Project Structure
-- **frontend/** – HTML, CSS, and JS files (static SPA)
-- **backend/** – routes, services, DAO
+✨ Features
 
-##  Milestone 1
--  Project structure created
--  Static frontend in progress
--  ERD draft to be added
+Browse and order flowers
+Order tracking for customers
+Admin panel for product and order management
+User authentication (customer / admin roles)
 
+📁 Project Structure
 
-![ER Diagram](Screenshot 2025-10-17 141450.png)
+frontend/ – HTML, CSS and JS files
+backend/ – routes, services, DAO
