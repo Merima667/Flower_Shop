@@ -3,7 +3,7 @@ A full-stack web application for an online flower shop. Users can browse flowers
 🛠️ Tech Stack
 
 Frontend: HTML, CSS, JavaScript
-Backend: Java
+Backend: PHP
 Database: MySQL
 
 ✨ Features
